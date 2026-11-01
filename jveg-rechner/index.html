@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JVEG Rechner 2026 – Dolmetscher- und Sachverständigenvergütung berechnen</title>
+<meta name="description" content="JVEG-Vergütung schnell berechnen: Dolmetscherhonorar 93 €/Std., Übersetzungen je Zeile, Fahrtkosten 0,42 €/km, Nachtzuschlag. Mit Stichtag-Hinweis (altes/neues Recht nach KostBRÄG 2025) und 3-Monats-Frist nach § 2 JVEG.">
+<style>
+:root{--c:#1d3a5f;--bg:#f5f7fa;--card:#fff;--ink:#1c2733;--ok:#1a7f4b;--warn:#b4530a}
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem;color:var(--c);line-height:1.35}
+h2{font-size:1.15rem;color:var(--c);margin-top:1.8em}
+.card{background:var(--card);border:1px solid #d9e0e8;border-radius:12px;padding:18px;margin:14px 0}
+label{display:block;font-weight:600;margin:10px 0 4px}
+input,select{width:100%;padding:12px;font-size:1.05rem;border:1px solid #b9c4cd;border-radius:8px}
+.seg{display:flex;gap:8px;margin:6px 0}.seg button{flex:1;padding:10px;border:1px solid #b9c4cd;border-radius:8px;background:#fff;font-size:1rem;cursor:pointer}
+.seg button.on{background:var(--c);color:#fff;border-color:var(--c)}
+.row{display:flex;gap:10px}.row>div{flex:1}
+.res{margin-top:14px;padding:14px;border-radius:10px;background:#eef4fb;display:none}
+.res .big{font-size:1.5rem;font-weight:800;color:var(--ok)}
+.note{font-size:.85rem;color:#5a6e7a}
+.cta{display:block;text-align:center;background:var(--c);color:#fff;font-weight:700;font-size:1.05rem;padding:15px;border-radius:12px;text-decoration:none;margin:18px 0}
+.cta small{display:block;font-weight:400;font-size:.85rem;opacity:.9}
+.badge{display:inline-block;background:#e8eef6;color:var(--c);border-radius:6px;padding:2px 8px;font-size:.8rem;font-weight:700;margin-right:6px}
+table{width:100%;border-collapse:collapse;font-size:.95rem}td,th{padding:8px;border-bottom:1px solid #e4e9ee;text-align:left}
+.warnbox{border-left:4px solid var(--warn);background:#fdf3ea;padding:10px 14px;border-radius:0 8px 8px 0;font-size:.95rem}
+footer{font-size:.8rem;color:#5a6e7a;margin:24px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>JVEG Rechner 2026 – Vergütung für Dolmetscher, Übersetzer und Sachverständige</h1>
+<p>Berechnen Sie Ihre Vergütung nach dem <strong>Justizvergütungs- und -entschädigungsgesetz (JVEG)</strong> – mit den seit dem <strong>1. Juni 2025</strong> geltenden Sätzen (KostBRÄG 2025): Dolmetschen <strong>93 € je Stunde</strong>, Fahrtkosten <strong>0,42 € je km</strong>, Nachtzuschlag, Übersetzungen je Zeile.</p>
+
+<div class="card">
+  <div class="seg" id="mode">
+    <button class="on" data-m="dolmetscher">Dolmetschen</button>
+    <button data-m="uebersetzung">Übersetzung</button>
+  </div>
+  <div id="pane-dolmetscher">
+    <div class="row">
+      <div><label for="std">Einsatzzeit (Stunden)</label><input id="std" type="number" inputmode="decimal" placeholder="z. B. 3,5" step="0.5"></div>
+      <div><label for="km">Fahrtstrecke gesamt (km)</label><input id="km" type="number" inputmode="decimal" placeholder="z. B. 60"></div>
+    </div>
+    <label for="nacht">Nachtzuschlag (23–6 Uhr)?</label>
+    <select id="nacht"><option value="0">Nein</option><option value="0.2">Ja (+20 %)</option></select>
+  </div>
+  <div id="pane-uebersetzung" style="display:none">
+    <div class="row">
+      <div><label for="zeilen">Anzahl Zeilen (à 55 Anschläge)</label><input id="zeilen" type="number" inputmode="numeric" placeholder="z. B. 120"></div>
+      <div><label for="zsatz">Zeilensatz (€)</label><input id="zsatz" type="number" inputmode="decimal" value="1.95" step="0.05"></div>
+    </div>
+    <p class="note">Hinweis: Der Zeilensatz richtet sich nach § 11 JVEG (editierbare/nicht editierbare Texte, erschwerte Lesbarkeit). Voreingestellt ist der Grundsatz seit 01.06.2025.</p>
+  </div>
+  <div class="res" id="res">
+    <div>Vergütung (netto, ohne USt): <span class="big" id="sum">–</span></div>
+    <div class="note" id="detail"></div>
+  </div>
+</div>
+
+<div class="warnbox"><strong>⏰ § 2 JVEG – Frist nicht verpassen:</strong> Der Vergütungsanspruch muss innerhalb von <strong>3 Monaten</strong> geltend gemacht werden. Verspätete Anträge führen zum vollständigen Verlust des Anspruchs.</div>
+
+<a class="cta" href="#app" id="ctaTop">📱 JVEG-Rechner als Android-App – erscheint im November 2026
+<small>Komplett offline · einmal zahlen statt Abo · Ihre Daten bleiben auf Ihrem Gerät · automatische Stichtag-Erkennung (altes/neues Recht) · Fristen-Erinnerung · PDF-Antrag</small></a>
+
+<h2>Altes oder neues Recht? Der Stichtag entscheidet</h2>
+<div class="card">
+<p>Seit dem KostBRÄG 2025 gelten neue Sätze – aber <strong>nicht automatisch für jeden Auftrag</strong>. Maßgeblich ist nach § 24 JVEG der Zeitpunkt der <strong>Beauftragung bzw. Heranziehung</strong>:</p>
+<table>
+<tr><th></th><th>Beauftragung bis 31.05.2025</th><th>ab 01.06.2025</th></tr>
+<tr><td>Dolmetschen (je Stunde)</td><td>85,00 €</td><td><strong>93,00 €</strong></td></tr>
+<tr><td>Fahrtkosten (je km, Pkw)</td><td>0,42 €</td><td><strong>0,42 €</strong></td></tr>
+<tr><td>Übersetzung (Grundsatz je Zeile)</td><td>1,80 €</td><td><strong>1,95 €</strong></td></tr>
+</table>
+<p class="note">Bei länger laufenden Verfahren können dadurch mehrere Vergütungssätze parallel gelten. Die App erkennt den richtigen Satz automatisch anhand des Auftragsdatums.</p>
+</div>
+
+<h2>Häufige Fragen</h2>
+<div class="card">
+<p><strong>Welche Zeiten werden vergütet?</strong><br>Die gesamte erforderliche Zeit einschließlich Warte- und Reisezeit (§ 8 JVEG) – nicht nur die reine Verhandlungsdauer.</p>
+<p><strong>Gilt der Nachtzuschlag auch am Wochenende?</strong><br>Der Zuschlag von 20 % gilt für Leistungen zwischen 23 und 6 Uhr sowie an Sonn- und Feiertagen (§ 9 Abs. 5 JVEG).</p>
+<p><strong>Was ist mit Rahmenvereinbarungen nach § 14 JVEG?</strong><br>Haben Sie mit der Justizverwaltung eine Vereinbarung geschlossen, gelten die dort festgelegten Sätze. In der App lassen sich eigene Sätze hinterlegen.</p>
+<p><strong>Der bisherige Online-Rechner ist weg – was nun?</strong><br>Der bekannte Online-JVEG-Rechner wurde zum 31.10.2026 eingestellt; dort gespeicherte Daten wurden gelöscht. Unsere App arbeitet vollständig offline – Ihre Abrechnungen bleiben dauerhaft auf Ihrem Gerät.</p>
+</div>
+
+<a class="cta" href="#app">📱 JVEG-Rechner App (Android) – Offline · ohne Abo · mit PDF-Antrag</a>
+
+<footer id="app">Unverbindliche Berechnung – maßgeblich ist die Festsetzung des Gerichts. Grundlage: JVEG in der Fassung des KostBRÄG 2025. Keine Rechtsberatung. · <a href="privacy.html">Datenschutz</a></footer>
+</div>
+<script>
+let M='dolmetscher';
+document.getElementById('mode').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ document.querySelectorAll('#mode button').forEach(x=>x.classList.remove('on'));b.classList.add('on');M=b.dataset.m;
+ document.getElementById('pane-dolmetscher').style.display=M==='dolmetscher'?'':'none';
+ document.getElementById('pane-uebersetzung').style.display=M==='uebersetzung'?'':'none';calc();});
+['std','km','nacht','zeilen','zsatz'].forEach(i=>document.getElementById(i).addEventListener('input',calc));
+document.getElementById('nacht').addEventListener('change',calc);
+function fmt(n){return n.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';}
+function calc(){
+ const res=document.getElementById('res');let sum=0,detail='';
+ if(M==='dolmetscher'){
+  const h=parseFloat(document.getElementById('std').value),km=parseFloat(document.getElementById('km').value)||0,
+        nz=parseFloat(document.getElementById('nacht').value);
+  if(!h||h<=0){res.style.display='none';return;}
+  const hon=h*93*(1+nz),fahrt=km*0.42;sum=hon+fahrt;
+  detail=h.toLocaleString('de-DE')+' Std. × 93 €'+(nz?' × 1,2 (Nachtzuschlag)':'')+' = '+fmt(hon)+' · Fahrtkosten '+km+' km × 0,42 € = '+fmt(fahrt)+' (Sätze ab 01.06.2025)';
+ }else{
+  const z=parseFloat(document.getElementById('zeilen').value),s=parseFloat(document.getElementById('zsatz').value)||1.95;
+  if(!z||z<=0){res.style.display='none';return;}
+  sum=z*s;detail=z+' Zeilen × '+fmt(s);
+ }
+ document.getElementById('sum').textContent=fmt(sum);
+ document.getElementById('detail').textContent=detail;
+ res.style.display='block';
+}
+</script>
+</body>
+</html>
